@@ -28,6 +28,13 @@ func DoLogout(c *gin.Context) {
 	q := u.Query()
 	q.Set("service", reqUrl.String())
 
+	cookie, _ := c.Request.Cookie("_cas_session")
+	cookie.MaxAge = -1
+	http.SetCookie(c.Writer, cookie)
+
+	lib.SessionsStore.Delete(cookie.Value)
+	lib.TicketStore.Delete(cookie.Value)
+
 	u.RawQuery = q.Encode()
 	c.JSON(http.StatusOK, gin.H{
 		"status": http.StatusForbidden,
