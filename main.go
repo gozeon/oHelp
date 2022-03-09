@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"oHelp/auth"
+	"oHelp/comment"
 	"oHelp/lib"
 	"oHelp/middleware"
 	"oHelp/model"
@@ -26,7 +27,7 @@ func init() {
 	lib.InitCas()
 	lib.InitDb()
 
-	lib.DBClient.AutoMigrate(&model.Order{})
+	lib.DBClient.AutoMigrate(&model.Order{}, &model.Comment{})
 
 	err := os.MkdirAll(filepath.Join(".", "static"), os.ModePerm)
 	if err != nil {
@@ -65,7 +66,15 @@ func main() {
 		orderR := oHelp.Group("/order")
 		{
 			orderR.GET("/", order.DoList)
+			orderR.GET("/:id", order.DoInfo)
 			orderR.POST("/", order.DoCreate)
+			orderR.PUT("/status/:id", order.DoUpdateStatus)
+		}
+
+		commentR := oHelp.Group("/comment")
+		{
+			commentR.POST("/", comment.DoCreate)
+			commentR.GET("/inOrder/:id", comment.DoListByOrderId)
 		}
 	}
 	r.Run(port)

@@ -1,4 +1,4 @@
-package order
+package comment
 
 import (
 	"net/http"
@@ -10,7 +10,7 @@ import (
 )
 
 func DoCreate(c *gin.Context) {
-	var json model.Order
+	var json model.Comment
 	if err := c.ShouldBindJSON(&json); err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"status": http.StatusBadRequest,
@@ -22,7 +22,6 @@ func DoCreate(c *gin.Context) {
 
 	session := sessions.Default(c)
 	json.CreateUser = session.Get("username").(string)
-	json.Status = true
 
 	result := lib.DBClient.Create(&json)
 	if result.Error != nil {
