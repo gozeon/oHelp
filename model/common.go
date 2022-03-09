@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// https://gorm.io/docs/models.html#gorm-Model
+// CommonModel https://gorm.io/docs/models.html#gorm-Model
 type CommonModel struct {
 	ID        uint           `gorm:"primary_key" json:"id"`
 	CreatedAt time.Time      `json:"created_at"`

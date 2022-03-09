@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"oHelp/approval"
 	"oHelp/auth"
 	"oHelp/comment"
 	"oHelp/lib"
@@ -27,7 +28,7 @@ func init() {
 	lib.InitCas()
 	lib.InitDb()
 
-	lib.DBClient.AutoMigrate(&model.Order{}, &model.Comment{})
+	lib.DBClient.AutoMigrate(&model.Order{}, &model.Comment{}, &model.Approval{}, &model.Progress{})
 
 	err := os.MkdirAll(filepath.Join(".", "static"), os.ModePerm)
 	if err != nil {
@@ -75,6 +76,13 @@ func main() {
 		{
 			commentR.POST("/", comment.DoCreate)
 			commentR.GET("/inOrder/:id", comment.DoListByOrderId)
+		}
+
+		approvalR := oHelp.Group("/approval")
+		{
+			approvalR.GET("/", approval.DoList)
+			approvalR.GET("/:id", approval.DoInfo)
+			approvalR.POST("/", approval.DoCreate)
 		}
 	}
 	r.Run(port)

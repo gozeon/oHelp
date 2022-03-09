@@ -1,4 +1,4 @@
-package order
+package approval
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 )
 
 func DoList(c *gin.Context) {
-	var json []model.Order
+	var json []model.Approval
 	var total int64
 
 	p := model.Page{
@@ -31,7 +31,7 @@ func DoList(c *gin.Context) {
 		p.PageNum = 1
 	}
 
-	query := lib.DBClient.Model(&model.Order{})
+	query := lib.DBClient.Model(&model.Approval{})
 
 	id := c.Query("id")
 	if len(id) > 0 {
@@ -43,23 +43,18 @@ func DoList(c *gin.Context) {
 		query.Where("status = ?", status)
 	}
 
-	tag := c.Query("tag")
-	if len(tag) > 0 {
-		query.Where("tags LIKE ?", fmt.Sprint("%", tag, "%"))
+	approver := c.Query("approver")
+	if len(approver) > 0 {
+		query.Where("approver = ?", approver)
+	}
+
+	createUser := c.Query("createUser")
+	if len(createUser) > 0 {
+		query.Where("create_user = ?", createUser)
 	}
 
 	query.Count(&total)
 	query.Limit(p.PageSize).Offset((p.PageNum - 1) * p.PageSize).Order("updated_at desc").Find(&json)
-
-	// result := query.Find(&json)
-	// if result.Error != nil {
-	// 	c.JSON(http.StatusOK, gin.H{
-	// 		"status": http.StatusBadRequest,
-	// 		"msg":    result.Error.Error(),
-	// 		"data":   []string{},
-	// 	})
-	// 	return
-	// }
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": 0,
