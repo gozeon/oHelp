@@ -1,6 +1,7 @@
 package approval
 
 import (
+	"fmt"
 	"net/http"
 	"oHelp/lib"
 	"oHelp/model"
@@ -21,7 +22,10 @@ func DoCreate(c *gin.Context) {
 	}
 
 	session := sessions.Default(c)
-	json.CreateUser = session.Get("username").(string)
+	uname := session.Get("username").(string)
+	json.CreateUser = uname
+
+	json.Status = 1
 
 	result := lib.DBClient.Create(&json)
 	if result.Error != nil {
@@ -32,6 +36,13 @@ func DoCreate(c *gin.Context) {
 		})
 		return
 	}
+
+	lib.DBClient.Create(&model.Progress{
+		Operate:    1,
+		Opinion:    fmt.Sprint(uname, " 发起申请。"),
+		CreateUser: uname,
+		ApprovalId: json.ID,
+	})
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": 0,

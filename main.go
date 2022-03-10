@@ -11,6 +11,7 @@ import (
 	"oHelp/middleware"
 	"oHelp/model"
 	"oHelp/order"
+	"oHelp/progress"
 	"oHelp/upload"
 	"os"
 	"path/filepath"
@@ -83,6 +84,12 @@ func main() {
 			approvalR.GET("/", approval.DoList)
 			approvalR.GET("/:id", approval.DoInfo)
 			approvalR.POST("/", approval.DoCreate)
+		}
+
+		progressR := oHelp.Group("/progress")
+		{
+			progressR.GET("/inApproval/:id", progress.DoListByApprovalId)
+			progressR.POST("/", progress.DoCreate)
 		}
 	}
 	r.Run(port)
