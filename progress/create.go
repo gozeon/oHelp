@@ -27,7 +27,7 @@ func DoCreate(c *gin.Context) {
 	json.CreateUser = uname
 
 	operateArr := [6]string{"", "申请", "移交", "通过", "驳回", "回复"}
-	msg := fmt.Sprintf("<p>%s  %s 了审批。</p>", uname, operateArr[json.Operate])
+	msg := fmt.Sprintf("<p>%s  %s 了该审批申请。</p>", uname, operateArr[json.Operate])
 	json.Opinion = fmt.Sprint(msg, json.Opinion)
 
 	if json.Operate >= 2 || json.Operate <= 4 {
