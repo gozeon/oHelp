@@ -12,6 +12,7 @@ import (
 	"oHelp/model"
 	"oHelp/order"
 	"oHelp/progress"
+	"oHelp/ui"
 	"oHelp/upload"
 	"os"
 	"path/filepath"
@@ -49,7 +50,8 @@ func main() {
 
 	store := cookie.NewStore([]byte(appName))
 	r.Use(sessions.Sessions(fmt.Sprint("_", appName, "_session"), store))
-
+	r.StaticFS("/ui", http.FS(ui.DistDirFS))
+	r.Static("/static", "./static")
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
@@ -57,7 +59,6 @@ func main() {
 	})
 
 	oHelp := r.Group(fmt.Sprintf("/%s", appName))
-	oHelp.Static("/static", "./static")
 	oHelp.Use(middleware.CasAuth("login", "logout"))
 	{
 		oHelp.GET("/login", auth.DoLogin)

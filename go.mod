@@ -1,17 +1,20 @@
 module oHelp
 
-go 1.17
+go 1.18
 
 require (
+	github.com/gin-contrib/cors v1.3.1
+	github.com/gin-contrib/sessions v0.0.4
 	github.com/gin-gonic/gin v1.7.7
+	github.com/labstack/echo/v5 v5.0.0-20220201181537-ed2888cfa198
 	github.com/spf13/viper v1.10.1
 	gopkg.in/cas.v2 v2.2.2
+	gorm.io/driver/mysql v1.3.2
+	gorm.io/gorm v1.23.2
 )
 
 require (
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
-	github.com/gin-contrib/cors v1.3.1 // indirect
-	github.com/gin-contrib/sessions v0.0.4 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
@@ -45,6 +48,4 @@ require (
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/ini.v1 v1.66.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gorm.io/driver/mysql v1.3.2 // indirect
-	gorm.io/gorm v1.23.2 // indirect
 )
